@@ -15,11 +15,14 @@ var Eff = (function() {
 	    return { r: r * 255, g: g * 255, b: b * 255 };
 	};
 
+	var isin = function(a) { return 255 * Math.sin(a * 6.282); };
+	var icos = function(a) { return 255 * Math.cos(a * 6.282); };
+
 	var Eff = function(canvas) {
 		var audio = new AudioContext();
 		var spn = audio.createScriptProcessor(0, 1);
 		spn.bufferSize = 512;
-		var t = 0;
+		var t = 0, x = 0;
 		var fun = function() { return 0; };
 		if(canvas) {
 			canvas.width = spn.bufferSize;
@@ -28,8 +31,10 @@ var Eff = (function() {
 			ctx.fillStyle = "rgba(0,0,0,0.1)";
 		}
 
-		var isin = function(a) { return 255 * Math.sin(a * 6.282); };
-		var icos = function(a) { return 255 * Math.cos(a * 6.282); };
+		window.addEventListener("mousemove", function(event) {
+			x = event.clientX / window.innerWidth;
+		}, false);
+
 		var hue = 0;
 
 		spn.onaudioprocess = function(event) {
@@ -42,14 +47,20 @@ var Eff = (function() {
 
 			var rgb = hsvToRgb(hue, 1, 1);
 
+			var env = {
+				sin: isin,
+				cos: icos,
+				min: Math.min,
+				max: Math.max,
+				x: x
+			};
+
 			for(var i = 0; i < n; i++) {
-				var sam = fun({
-					t: t,
-					r: 0 | (Math.random() * 255),
-					b: audio.currentTime * 100,
-					sin: isin,
-					cos: icos
-				}) & 0xFF;
+				env.t = t;
+				env.r = 0 | (Math.random() * 255);
+				env.b = audio.currentTime * 100;
+				env.f = i;
+				var sam = fun(env) & 0xFF;
 				out0[i] = ((sam & 0xFF) - 127) / 255.0;
 				t++;
 				if(canvas) {
@@ -67,6 +78,7 @@ var Eff = (function() {
 		this.start = function() { spn.connect(audio.destination); };
 		this.stop = function() { spn.disconnect(audio.destination); };
 		this.setFun = function(f) { fun = f; };
+		this.reset = function() { t = 0; hue = 0; };
 	};
 	return Eff;
 }());

@@ -12,8 +12,14 @@
 		if (fun) eff.setFun(fun);
 	};
 
+	var inp = document.getElementById("inp");
+
+	inp.addEventListener("keyup", function(event) {
+		if(event.keyCode == 13) eff.reset();
+	}, false);
+
 	var noise = new Noise(
-		document.getElementById("inp"),
+		inp,
 		document.getElementById("outp"),
 		setNoise
 	);
