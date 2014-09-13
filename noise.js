@@ -1,9 +1,13 @@
 var Noise = (function() {
+	var variables = "tbfxyl".split("");
+	var functions_1 = "sin cos tick tock".split(" ");
+	var functions_0 = "r".split(" ");
 	function processToken(stack, bit) {
 		var m, a, b;
 		if(bit == "") return;
-		if(bit == "t" || bit == "r" || bit == "b" || bit == "f" || bit == "x") return stack.push(bit);
-		if(bit == "sin" || bit == "cos") return stack.push(bit + "(" + (stack.pop() || 0) + ")");
+		if(variables.indexOf(bit) > -1) return stack.push(bit);
+		if(functions_1.indexOf(bit) > -1) return stack.push(bit + "(" + (stack.pop() || 0) + ")");
+		if(functions_0.indexOf(bit) > -1) return stack.push(bit + "()");
 		if(bit == "_") return stack.push("(0|(" + (stack.pop() || 0) + "))");
 		if(bit == "~") return stack.push("(~(" + (stack.pop() || 0) + "))");
 		if(bit == "w") return stack.push("((" + (stack.pop() || 0) + ")&0xFF)");

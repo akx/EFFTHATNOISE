@@ -17,12 +17,16 @@ var Eff = (function() {
 
 	var isin = function(a) { return 255 * Math.sin(a * 6.282); };
 	var icos = function(a) { return 255 * Math.cos(a * 6.282); };
+	var tick = function(a) { return this.t % (0 | a) == 0 ? 1 : 0;};
+	var tock = function(a) {
+		a = 0 | a;
+		return this.t % a < (a / 2) ? 1 : 0;
+	};
 
 	var Eff = function(canvas) {
 		var audio = new AudioContext();
 		var spn = audio.createScriptProcessor(0, 1);
 		spn.bufferSize = 512;
-		var t = 0, x = 0;
 		var fun = function() { return 0; };
 		if(canvas) {
 			canvas.width = spn.bufferSize;
@@ -32,10 +36,26 @@ var Eff = (function() {
 		}
 
 		window.addEventListener("mousemove", function(event) {
-			x = event.clientX / window.innerWidth;
+			env.x = event.clientX / window.innerWidth;
+			env.y = event.clientY / window.innerHeight;
 		}, false);
 
 		var hue = 0;
+
+		var env = {
+			sin: isin,
+			cos: icos,
+			min: Math.min,
+			max: Math.max,
+			r: function(){ return 0 | (Math.random() * 255); },
+			l: 0,
+			t: 0,
+			x: 0,
+			y: 0
+
+		};
+		env.tick = tick.bind(env);
+		env.tock = tock.bind(env);
 
 		spn.onaudioprocess = function(event) {
 			var n = event.outputBuffer.length;
@@ -46,23 +66,13 @@ var Eff = (function() {
 			}
 
 			var rgb = hsvToRgb(hue, 1, 1);
-
-			var env = {
-				sin: isin,
-				cos: icos,
-				min: Math.min,
-				max: Math.max,
-				x: x
-			};
+			env.b = audio.currentTime * 100;
 
 			for(var i = 0; i < n; i++) {
-				env.t = t;
-				env.r = 0 | (Math.random() * 255);
-				env.b = audio.currentTime * 100;
 				env.f = i;
-				var sam = fun(env) & 0xFF;
+				var sam = env.l = fun(env) & 0xFF;
 				out0[i] = ((sam & 0xFF) - 127) / 255.0;
-				t++;
+				env.t++;
 				if(canvas) {
 					var off = (sam * canvas.width * 4 + i * 4);
 					imageData.data[off] = rgb.r;
@@ -78,7 +88,7 @@ var Eff = (function() {
 		this.start = function() { spn.connect(audio.destination); };
 		this.stop = function() { spn.disconnect(audio.destination); };
 		this.setFun = function(f) { fun = f; };
-		this.reset = function() { t = 0; hue = 0; };
+		this.reset = function() { env.t = 0; hue = 0; env.l = 0; };
 	};
 	return Eff;
 }());
