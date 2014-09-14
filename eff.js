@@ -1,4 +1,5 @@
 var Eff = (function() {
+	"use strict";
 	function hsvToRgb(h, s, v) {
 	    h = h / 360 * 6;
 
@@ -13,11 +14,11 @@ var Eff = (function() {
 	        b = [p, p, t, v, v, q][mod];
 
 	    return { r: r * 255, g: g * 255, b: b * 255 };
-	};
+	}
 
 	var isin = function(a) { return 255 * Math.sin(a * 6.282); };
 	var icos = function(a) { return 255 * Math.cos(a * 6.282); };
-	var tick = function(a) { return this.t % (0 | a) == 0 ? 1 : 0;};
+	var tick = function(a) { return this.t % (0 | a) === 0 ? 1 : 0;};
 	var tock = function(a) {
 		a = 0 | a;
 		return this.t % a < (a / 2) ? 1 : 0;
@@ -58,20 +59,21 @@ var Eff = (function() {
 		env.tock = tock.bind(env);
 
 		spn.onaudioprocess = function(event) {
-			var n = event.outputBuffer.length;
-			var out0 = event.outputBuffer.getChannelData(0);
+			var i, n = event.outputBuffer.length, chans = [], sam, bsam, rgb, imageData;
+			for(i = 0; i < event.outputBuffer.numberOfChannels; i++) chans.push(event.outputBuffer.getChannelData(i));
 			if(canvas) {
 				ctx.fillRect(0, 0, canvas.width, canvas.height);
-				var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+				imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 			}
 
-			var rgb = hsvToRgb(hue, 1, 1);
+			rgb = hsvToRgb(hue, 1, 1);
 			env.b = audio.currentTime * 100;
 
-			for(var i = 0; i < n; i++) {
+			for(i = 0; i < n; i++) {
 				env.f = i;
-				var sam = env.l = fun(env) & 0xFF;
-				out0[i] = ((sam & 0xFF) - 127) / 255.0;
+				sam = env.l = fun(env) & 0xFF;
+				bsam = ((sam & 0xFF) - 127) / 255.0;
+				for(var c = 0; c < chans.length; c++) chans[c][i] = bsam;
 				env.t++;
 				if(canvas) {
 					var off = (sam * canvas.width * 4 + i * 4);
