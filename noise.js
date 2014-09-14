@@ -3,7 +3,7 @@ var Noise = (function() {
 	var functions_1 = "sin cos tick tock".split(" ");
 	var functions_0 = "r".split(" ");
 	function processToken(stack, bit) {
-		var m, a, b;
+		var m, a, b, inv = false, op;
 		if(bit === "") return;
 		if(variables.indexOf(bit) > -1) return stack.push(bit);
 		if(functions_1.indexOf(bit) > -1) return stack.push(bit + "(" + (stack.pop() || 0) + ")");
@@ -15,12 +15,19 @@ var Noise = (function() {
 		if((m=(/^0?x([0-9a-f]+)$/.exec(bit)))) return stack.push(parseInt(m[1], 16));
 		if((m=(/^(-?[0-9]+)$/.exec(bit)))) return stack.push(parseInt(m[1], 10));
 		if((m=(/^(-?[0-9]+\.[0-9]+)$/.exec(bit)))) return stack.push(parseFloat(m[1]));
+		if(/^\./.exec(bit)) { inv = true; bit = bit.substr(1); }
 		if(/^[-+\/*%&^|<>]/.exec(bit) || bit == "<<" || bit == ">>" || bit == ">>>") {
+			op = bit;
 			b = stack.pop() || 0;
 			a = stack.pop() || 0;
-			if(bit == "<") return stack.push("min(" + a + ", " + b + ")");
-			if(bit == ">") return stack.push("max(" + a + ", " + b + ")");
-			return stack.push("(" + a + " " + bit + " " + b + ")");
+			if(inv) {
+				m = b;
+				b = a;
+				a = m;
+			}
+			if(op == "<") return stack.push("min(" + a + ", " + b + ")");
+			if(op == ">") return stack.push("max(" + a + ", " + b + ")");
+			return stack.push("(" + a + " " + op + " " + b + ")");
 		}
 	}
 

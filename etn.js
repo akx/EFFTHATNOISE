@@ -27,5 +27,5 @@
 	inp.title =
 	"VARIABLES: t = time, b = realtime, r = noise, f = buffer pos, x = mouse x (0..1), y = mouse y (0..1), l = last value\n" +
 	"1-ARG FUNCS: tick = generate tick pulse every t == N. tock = generate square wave with frequency N. sin. cos.\n" +
-	"OPERATORS: + - * / << >> >>> & | ^ _\n";
+	"OPERATORS: + - * / << >> >>> & | ^ _ < > (prefix with . for operand transpose)\n";
 }());
