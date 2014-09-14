@@ -52,8 +52,8 @@ var Eff = (function() {
 			l: 0,
 			t: 0,
 			x: 0,
-			y: 0
-
+			y: 0,
+			dc: 0
 		};
 		env.tick = tick.bind(env);
 		env.tock = tock.bind(env);
@@ -68,12 +68,14 @@ var Eff = (function() {
 
 			rgb = hsvToRgb(hue, 1, 1);
 			env.b = audio.currentTime * 100;
+			var dc = 0;
 
 			for(i = 0; i < n; i++) {
 				env.f = i;
 				sam = env.l = fun(env) & 0xFF;
 				bsam = ((sam & 0xFF) - 127) / 255.0;
-				for(var c = 0; c < chans.length; c++) chans[c][i] = bsam;
+				dc += bsam;
+				for(var c = 0; c < chans.length; c++) chans[c][i] = bsam - env.dc;
 				env.t++;
 				if(canvas) {
 					var off = (sam * canvas.width * 4 + i * 4);
@@ -83,6 +85,7 @@ var Eff = (function() {
 				}
 				hue += sam;
 			}
+			env.dc = ((dc / n) + env.dc * 4) / 5.0;
 			hue %= 360;
 			if(canvas) ctx.putImageData(imageData, 0, 0);
 		};
@@ -90,7 +93,7 @@ var Eff = (function() {
 		this.start = function() { spn.connect(audio.destination); };
 		this.stop = function() { spn.disconnect(audio.destination); };
 		this.setFun = function(f) { fun = f; };
-		this.reset = function() { env.t = 0; hue = 0; env.l = 0; };
+		this.reset = function() { env.t = 0; hue = 0; env.l = 0; env.dc = 0; };
 	};
 	return Eff;
 }());
