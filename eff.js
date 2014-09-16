@@ -47,6 +47,7 @@ var Eff = (function() {
 			sin: isin,
 			cos: icos,
 			tan: itan,
+			abs: Math.abs,
 			min: Math.min,
 			max: Math.max,
 			r: function(){ return 0 | (Math.random() * 255); },
