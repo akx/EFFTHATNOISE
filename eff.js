@@ -26,8 +26,7 @@ var Eff = (function() {
 
 	var Eff = function(canvas) {
 		var audio = new AudioContext();
-		var spn = audio.createScriptProcessor(0, 1);
-		spn.bufferSize = 512;
+		var spn = audio.createScriptProcessor(1024, 0, 1);
 		var fun = function() { return 0; };
 		if(canvas) {
 			canvas.width = spn.bufferSize;
