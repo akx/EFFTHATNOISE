@@ -1,6 +1,6 @@
 var Noise = (function() {
-	var variables = "tbfxyl".split("");
-	var functions_1 = "sin cos tick tock".split(" ");
+	var variables = "tbfxylg".split("");
+	var functions_1 = "sin cos tan tick tock".split(" ");
 	var functions_0 = "r".split(" ");
 	function processToken(stack, bit) {
 		var m, a, b, inv = false, op;

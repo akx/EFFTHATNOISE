@@ -18,6 +18,7 @@ var Eff = (function() {
 
 	var isin = function(a) { return 255 * Math.sin(a * 6.282); };
 	var icos = function(a) { return 255 * Math.cos(a * 6.282); };
+	var itan = function(a) { return 255 * Math.tan(a * 6.282); };
 	var tick = function(a) { return this.t % (0 | a) === 0 ? 1 : 0;};
 	var tock = function(a) {
 		a = 0 | a;
@@ -45,6 +46,7 @@ var Eff = (function() {
 		var env = {
 			sin: isin,
 			cos: icos,
+			tan: itan,
 			min: Math.min,
 			max: Math.max,
 			r: function(){ return 0 | (Math.random() * 255); },
@@ -71,6 +73,7 @@ var Eff = (function() {
 
 			for(i = 0; i < n; i++) {
 				env.f = i;
+				env.g = i / n;
 				sam = env.l = fun(env) & 0xFF;
 				bsam = ((sam & 0xFF) - 127) / 255.0;
 				dc += bsam;
