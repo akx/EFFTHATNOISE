@@ -18,6 +18,10 @@
 		if(event.keyCode == 13) eff.reset();
 	}, false);
 
+	document.addEventListener("keyup", function(event) {
+		eff.setQ(event.keyCode);
+	}, false);
+
 	var noise = new Noise(
 		inp,
 		document.getElementById("outp"),
@@ -25,7 +29,7 @@
 	);
 
 	inp.title =
-	"VARIABLES: t = time, b = realtime, r = noise, f = buffer pos (int), g = buffer pos (0..1), x = mouse x (0..1), y = mouse y (0..1), l = last value\n" +
+	"VARIABLES: t = time, b = realtime, r = noise, f = buffer pos (int), g = buffer pos (0..1), x = mouse x (0..1), y = mouse y (0..1), l = last value generated, q = last keycode\n" +
 	"1-ARG FUNCS: tick = generate tick pulse every t == N. tock = generate square wave with frequency N. sin. cos. tan.\n" +
 	"OPERATORS: + - * / << >> >>> & | ^ _ < > (prefix with . for operand transpose)\n";
 }());

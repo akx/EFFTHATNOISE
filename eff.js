@@ -55,7 +55,9 @@ var Eff = (function() {
 			t: 0,
 			x: 0,
 			y: 0,
-			dc: 0
+			dc: 0,
+			q: 0,
+			bOffset: 0
 		};
 		env.tick = tick.bind(env);
 		env.tock = tock.bind(env);
@@ -69,7 +71,7 @@ var Eff = (function() {
 			}
 
 			rgb = hsvToRgb(hue, 1, 1);
-			env.b = audio.currentTime * 100;
+			env.b = (audio.currentTime - env.bOffset) * 100;
 			var dc = 0;
 
 			for(i = 0; i < n; i++) {
@@ -96,7 +98,8 @@ var Eff = (function() {
 		this.start = function() { spn.connect(audio.destination); };
 		this.stop = function() { spn.disconnect(audio.destination); };
 		this.setFun = function(f) { fun = f; };
-		this.reset = function() { env.t = 0; hue = 0; env.l = 0; env.dc = 0; };
+		this.reset = function() { env.t = 0; hue = 0; env.l = 0; env.dc = 0; env.bOffset = audio.currentTime; };
+		this.setQ = function(q) { env.q = 0 | q; };
 	};
 	return Eff;
 }());
