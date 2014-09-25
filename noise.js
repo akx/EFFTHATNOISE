@@ -32,6 +32,7 @@ var Noise = (function() {
 	}
 
 	function compile(source) {
+		if(/^!/.test(source)) return source.substr(1);
 		var stack = [];
 		var bits = source.split(/\s+/);
 		while(bits.length) {
