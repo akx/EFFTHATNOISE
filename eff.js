@@ -27,10 +27,10 @@ var Eff = (function() {
 
 	var Eff = function(canvas) {
 		var audio = new AudioContext();
-		var spn = audio.createScriptProcessor(1024, 0, 1);
+		var spn = audio.createScriptProcessor(4096, 0, 1);
 		var fun = function() { return 0; };
 		if(canvas) {
-			canvas.width = spn.bufferSize;
+			canvas.width = 1024;
 			canvas.height = 256;
 			var ctx = canvas.getContext("2d"), imageData;
 			ctx.fillStyle = "rgba(0,0,0,0.1)";
@@ -83,7 +83,7 @@ var Eff = (function() {
 				for(var c = 0; c < chans.length; c++) chans[c][i] = bsam - env.dc;
 				env.t++;
 				if(canvas) {
-					var off = (sam * canvas.width * 4 + i * 4);
+					var off = (sam * canvas.width * 4 + (0 | ((i / n) * canvas.width)) * 4);
 					imageData.data[off] = rgb.r;
 					imageData.data[off + 1] = rgb.g;
 					imageData.data[off + 2] = rgb.b;
