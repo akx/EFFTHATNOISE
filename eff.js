@@ -25,8 +25,7 @@ var Eff = (function() {
 		return this.t % a < (a / 2) ? 1 : 0;
 	};
 
-	var Eff = function(canvas) {
-		var audio = new AudioContext();
+	var Eff = function(audio, canvas) {
 		var spn = audio.createScriptProcessor(4096, 0, 1);
 		var fun = function() { return 0; };
 		if(canvas) {

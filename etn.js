@@ -1,6 +1,6 @@
 (function() {
-	var eff = new Eff(document.getElementById("c"));
-	eff.start();
+	var audio = new AudioContext();
+	var eff = new Eff(audio, document.getElementById("c"));
 
 	var setNoise = function (compiled) {
 		var fun = null;
@@ -13,6 +13,13 @@
 	};
 
 	var inp = document.getElementById("inp");
+
+	inp.addEventListener("click", function(event) {
+		if(audio.state !== 'running') {
+			eff.start();
+			audio.resume();
+		}
+	}, false);
 
 	inp.addEventListener("keyup", function(event) {
 		if(event.keyCode == 13) eff.reset();
