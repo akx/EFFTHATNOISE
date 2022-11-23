@@ -13,6 +13,7 @@
   };
 
   var inp = document.getElementById("inp");
+  inp.classList.add("stopped");
 
   inp.addEventListener(
     "click",
@@ -21,6 +22,7 @@
         audio.resume();
       }
       eff.start();
+      inp.classList.remove("stopped");
     },
     false
   );
@@ -28,7 +30,7 @@
   inp.addEventListener(
     "keyup",
     function (event) {
-      if (event.keyCode === 13) eff.reset();
+      if (event.key === "Enter") eff.reset();
     },
     false
   );

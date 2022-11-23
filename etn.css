@@ -45,3 +45,8 @@ input:focus,
 input:hover {
   opacity: 0.7;
 }
+
+#inp.stopped {
+  color: red;
+  opacity: 1;
+}
