@@ -16,7 +16,7 @@
 
   inp.addEventListener(
     "click",
-    function (event) {
+    function () {
       if (audio.state !== "running") {
         audio.resume();
       }
@@ -41,7 +41,7 @@
     false
   );
 
-  var noise = new Noise(inp, document.getElementById("outp"), setNoise);
+  new Noise(inp, document.getElementById("outp"), setNoise);
 
   inp.title =
     "VARIABLES: t = time, b = realtime, r = noise, f = buffer pos (int), g = buffer pos (0..1), x = mouse x (0..1), y = mouse y (0..1), l = last value generated, q = last keycode\n" +

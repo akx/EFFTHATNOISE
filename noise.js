@@ -1,4 +1,4 @@
-var Noise = (function () {
+window.Noise = (function () {
   var variables = "tbfxylgq".split("");
   var functions_1 = "sin cos tan abs tick tock".split(" ");
   var functions_0 = "r".split(" ");
@@ -27,7 +27,7 @@ var Noise = (function () {
       bit = bit.substr(1);
     }
     if (
-      /^[-+\/*%&^|<>]/.exec(bit) ||
+      /^[-+/*%&^|<>]/.exec(bit) ||
       bit == "<<" ||
       bit == ">>" ||
       bit == ">>>"

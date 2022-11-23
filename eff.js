@@ -1,4 +1,4 @@
-var Eff = (function () {
+window.Eff = (function () {
   "use strict";
   function hsvToRgb(h, s, v) {
     h = (h / 360) * 6;
@@ -43,11 +43,11 @@ var Eff = (function () {
         return 0;
       };
       this.spn = spn;
+      var ctx;
       if (canvas) {
         canvas.width = 1024;
         canvas.height = 256;
-        var ctx = canvas.getContext("2d"),
-          imageData;
+        ctx = canvas.getContext("2d");
         ctx.fillStyle = "rgba(0,0,0,0.1)";
       }
 
