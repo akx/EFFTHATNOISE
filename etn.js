@@ -18,9 +18,9 @@
     "click",
     function (event) {
       if (audio.state !== "running") {
-        eff.start();
         audio.resume();
       }
+      eff.start();
     },
     false
   );
