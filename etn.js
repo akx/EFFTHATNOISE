@@ -5,7 +5,7 @@
   var setNoise = function (compiled) {
     var fun = null;
     try {
-      fun = new Function("env", "with(env)return " + compiled + ";");
+      fun = new Function("env", `with(env)return ${compiled};`);
     } catch (e) {
       console.log(e);
     }
@@ -28,7 +28,7 @@
   inp.addEventListener(
     "keyup",
     function (event) {
-      if (event.keyCode == 13) eff.reset();
+      if (event.keyCode === 13) eff.reset();
     },
     false
   );

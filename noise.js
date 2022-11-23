@@ -2,6 +2,7 @@ window.Noise = (function () {
   var variables = "tbfxylgq".split("");
   var functions_1 = "sin cos tan abs tick tock".split(" ");
   var functions_0 = "r".split(" ");
+
   function processToken(stack, bit) {
     var m,
       a,
@@ -11,11 +12,11 @@ window.Noise = (function () {
     if (bit === "") return;
     if (variables.indexOf(bit) > -1) return stack.push(bit);
     if (functions_1.indexOf(bit) > -1)
-      return stack.push(bit + "(" + (stack.pop() || 0) + ")");
-    if (functions_0.indexOf(bit) > -1) return stack.push(bit + "()");
-    if (bit == "_") return stack.push("(0|(" + (stack.pop() || 0) + "))");
-    if (bit == "~") return stack.push("(~(" + (stack.pop() || 0) + "))");
-    if (bit == "w") return stack.push("((" + (stack.pop() || 0) + ")&0xFF)");
+      return stack.push(`${bit}(${stack.pop() || 0})`);
+    if (functions_0.indexOf(bit) > -1) return stack.push(`${bit}()`);
+    if (bit === "_") return stack.push(`(0|(${stack.pop() || 0}))`);
+    if (bit === "~") return stack.push(`(~(${stack.pop() || 0}))`);
+    if (bit === "w") return stack.push(`((${stack.pop() || 0})&0xFF)`);
     if ((m = /^0?b([01]+)$/.exec(bit))) return stack.push(parseInt(m[1], 2));
     if ((m = /^0?x([0-9a-f]+)$/.exec(bit)))
       return stack.push(parseInt(m[1], 16));
@@ -28,9 +29,9 @@ window.Noise = (function () {
     }
     if (
       /^[-+/*%&^|<>]/.exec(bit) ||
-      bit == "<<" ||
-      bit == ">>" ||
-      bit == ">>>"
+      bit === "<<" ||
+      bit === ">>" ||
+      bit === ">>>"
     ) {
       op = bit;
       b = stack.pop() || 0;
@@ -40,14 +41,14 @@ window.Noise = (function () {
         b = a;
         a = m;
       }
-      if (op == "<") return stack.push("min(" + a + ", " + b + ")");
-      if (op == ">") return stack.push("max(" + a + ", " + b + ")");
-      return stack.push("(" + a + " " + op + " " + b + ")");
+      if (op === "<") return stack.push(`min(${a}, ${b})`);
+      if (op === ">") return stack.push(`max(${a}, ${b})`);
+      return stack.push(`(${a} ${op} ${b})`);
     }
   }
 
   function compile(source) {
-    if (/^!/.test(source)) return source.substr(1);
+    if (/^!/.test(source)) return source.substring(1);
     var stack = [];
     var bits = source.split(/\s+/);
     while (bits.length) {

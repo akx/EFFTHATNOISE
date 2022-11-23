@@ -8,7 +8,11 @@ module.exports = {
   parserOptions: {
     ecmaVersion: "latest",
   },
-  rules: {},
+  rules: {
+    "prefer-template": "error",
+    "prefer-const": "error",
+    eqeqeq: "error",
+  },
   globals: {
     Eff: "readonly",
     Noise: "readonly",
